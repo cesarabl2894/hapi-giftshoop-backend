@@ -7,7 +7,7 @@ class encryptService {
         return salt;
     }
 
-    async hassPassword(str, salt) {
+    async hashPassword(str, salt) {
         const hashedString = await bcrypt.hash(str, salt);
         return hashedString;
     }

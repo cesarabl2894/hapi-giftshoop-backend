@@ -16,7 +16,7 @@ class UsersCtrl {
         }
         // Generate Salt And Hashed Password.
         const salt = await encryptService.generateSalt();
-        const hashedPassword = await encryptService.hassPassword(params.password, salt);
+        const hashedPassword = await encryptService.hashPassword(params.password, salt);
 
         // // Reassigning params.password to new hashed password
         params.password = hashedPassword;

@@ -14,6 +14,7 @@ const options = {
 };
 
 var token = jwt.sign({ accountId: 123 ,role: 'admin' }, process.env.SECRET_TOKEN_KEY, { algorithm: 'HS256'} );
+console.log(token);
 
 const start = async () => {
 

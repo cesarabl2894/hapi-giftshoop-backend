@@ -10,7 +10,6 @@ module.exports = [
             tags: ['api'],
             validate: {         
                 payload : {
-
                     first_name: Joi.string().required().min(2).max(20),
                     last_name:Joi.string().required().min(2).max(20),
                     email: Joi.string().required().min(2).max(30),

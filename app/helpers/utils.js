@@ -1,5 +1,6 @@
 const fs = require('fs');
 const glob = require('glob');
+const _ = require('lodash');
 
 const isArray = Array.isArray;
 
@@ -44,8 +45,9 @@ const validateToken = async function (decoded, request, h) {
 };
 
 module.exports = {
+    _,
     getFiles,
     getRoutes,
     promise,
-    validateToken
+    validateToken,    
 };

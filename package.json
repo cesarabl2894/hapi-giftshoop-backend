@@ -10,6 +10,7 @@
   "author": "Cesar Bonel",
   "license": "ISC",
   "dependencies": {
+    "@hapi/boom": "^8.0.1",
     "@hapi/glue": "^6.2.0",
     "@hapi/hapi": "^18.4.0",
     "@hapi/hoek": "^8.3.0",
@@ -20,6 +21,7 @@
     "glob": "^7.1.4",
     "hapi-auth-jwt2": "^8.8.0",
     "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.15",
     "mysql2": "^1.7.0"
   },
   "devDependencies": {

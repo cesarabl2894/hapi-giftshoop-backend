@@ -1,22 +1,28 @@
 const usersService = require('../models/services/users');
-const { hashPassword } = require('../models/services/encrypt');
+const encryptService = require('../models/services/encrypt');
+const { _ } = require('../helpers/utils');
+const jwt = require('jsonwebtoken');
+const Boom = require('@hapi/boom');
 
 class loginCtrl {
 
     async validateLogin(request) {
         const { email , password } = request.payload;
         const jsonResponse = {responseCode: 200, responseMessage: ''};
-        console.log(email);
-        const user = await usersService.getUserbyEmail(email);
+        const users = await usersService.getUserbyEmail(email);
+        const user = _.find(users, {email: email});
 
         
-        if(user.length > 0 ) {
-            jsonResponse.responseCode = 400;
-            jsonResponse.responseMessage = 'Not User Found with Email';
-            return jsonResponse;
+        if(user) {
+            const match = await encryptService.compare(password, user.password);
+            if(match){
+                jsonResponse.data = {
+                    token: jwt.sign(_.omit(users,['password','address','profile_picture']), process.env.SECRET_TOKEN_KEY, { algorithm: 'HS256', expiresIn: "2h" })
+                };
+                return jsonResponse;
+            }
         }
-
-        return jsonResponse;
+        return Boom.unauthorized('Invalid Credentials');
 
     }
 }

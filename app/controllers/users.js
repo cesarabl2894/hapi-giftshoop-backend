@@ -1,6 +1,6 @@
 const UsersService = require('../models/services/users');
 const encryptService = require('../models/services/encrypt');
-
+const Boom = require('@hapi/boom');
 
 class UsersCtrl {
     async addUser(request){
@@ -25,6 +25,20 @@ class UsersCtrl {
         jsonResponse.responseMessage = 'User Added Correctly';
         return jsonResponse;
 
+    }
+
+    async deleteUser(request) {
+        const { email } = request.payload;
+        const jsonResponse = {responseCode: 200, responseMessage: ''};
+        const user =await UsersService.getUserbyEmail(email);
+
+        if(user.length < 1 ) {
+            return Boom.badRequest('Not User Found');
+        }
+        
+        await UsersService.deleteUser(email);
+        jsonResponse.responseMessage = 'User Deleted Correctly';
+        return jsonResponse;
     }
 }
 

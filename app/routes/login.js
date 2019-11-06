@@ -5,7 +5,7 @@ module.exports = [
     {
         method: 'POST',
         path: '/login/',
-        handler: loginCtrl.validateLogin,
+        handler: loginCtrl.login,
         options: {
             tags: ['api'],
             validate: {

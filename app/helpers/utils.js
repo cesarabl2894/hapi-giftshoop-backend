@@ -36,7 +36,6 @@ const promise = (fn) =>{
     });
 }
 const validateToken = async function (decoded, request, h) {
-    console.log(decoded);
     if(request._route.settings.tags.includes('admin') && decoded.role !== 'admin'){
         return {isValid: false};
     }

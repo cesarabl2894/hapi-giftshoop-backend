@@ -22,6 +22,11 @@ class UsersDAO {
         const user = await db.execute(`SELECT * FROM User WHERE email = ?`, [email], 'games');
         return user;
     }
+
+    async deleteUser(email) {
+        const response = await db.execute('DELETE FROM User WHERE email = ?' , [email], 'games');
+        return response;
+    }
     
 }
 

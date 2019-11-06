@@ -4,24 +4,30 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 // Dependencies for Server inilization 
-const utils = require('./helpers/utils');
+const { getRoutes, validateToken } = require('./helpers/utils');
 const Glue = require('@hapi/glue');
 const Manifest = require('./config/manifest');
-
+const jwt = require('jsonwebtoken');
 
 const options = {
     relativeTo: __dirname
 };
+
 
 const start = async () => {
 
 	process.on('unhandledRejection', error => {
 		console.log('unhandledRejection', error);
 	});
-
-	const routes = utils.getRoutes();
-
+	// Routes imports
+	const routes = getRoutes();
+	// Server inilization with Glue
 	const server = await Glue.compose(Manifest.get('/'), options);
+
+	server.auth.strategy('jwt', 'jwt',
+	{ key: process.env.SECRET_TOKEN_KEY,
+		validate: validateToken
+	});
 
 	try{
 		for(let route of routes) {

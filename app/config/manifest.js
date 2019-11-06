@@ -11,8 +11,11 @@ internals.manifest = {
 	server: {
 		cache: false,
 		port: process.env.PORT || 3030,
-		host: process.env.HOST || 'localhost'
-	},
+        host: process.env.HOST || 'localhost',
+        routes: {
+            cors: true
+        }
+    },
 	register: {
 		plugins: [
 			{ 
@@ -20,6 +23,9 @@ internals.manifest = {
 			},
 			{
 				plugin: 'inert'
+			},
+			{
+				plugin: 'hapi-auth-jwt2'
 			},
 			{
                 plugin: 'hapi-swagger',

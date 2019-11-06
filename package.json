@@ -5,18 +5,23 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon ./app/index.js"
+    "start": "nodemon ./app/server.js"
   },
   "author": "Cesar Bonel",
   "license": "ISC",
   "dependencies": {
+    "@hapi/boom": "^8.0.1",
     "@hapi/glue": "^6.2.0",
     "@hapi/hapi": "^18.4.0",
     "@hapi/hoek": "^8.3.0",
+    "@hapi/joi": "^16.1.7",
+    "bcrypt": "^3.0.6",
     "confidence": "^4.0.2",
     "dotenv": "^8.1.0",
     "glob": "^7.1.4",
-    "joi": "^14.3.1",
+    "hapi-auth-jwt2": "^8.8.0",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.15",
     "mysql2": "^1.7.0"
   },
   "devDependencies": {

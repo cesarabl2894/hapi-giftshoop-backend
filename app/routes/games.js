@@ -65,13 +65,13 @@ module.exports = [
     },
     {
         method: 'DELETE',
-        path: '/games/',
+        path: '/games/{id}',
         handler: gamesCtrl.deleteGame,
         options: {            
             tags: ['api','admin'],
             auth: 'jwt',
             validate: {
-                payload: {
+                params: {
                     id: Joi.number().required()
                 }
             }

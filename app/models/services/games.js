@@ -26,6 +26,14 @@ class GamesService {
             throw('Something went wrong with the request');
         }
     }
+    updateGame(data) {
+        try{
+            const response  = gamesDAO.updateGame(data);
+            return response;
+        }catch(error){
+            throw('Something went wrong with the request');
+        }
+    }
     deleteGame(data) {
         try{
             const response  = gamesDAO.deleteGame(data);

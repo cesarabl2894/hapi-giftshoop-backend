@@ -21,12 +21,17 @@ class GamesCtrl {
         return jsonResponse;
     }
     async updateGame(request) {
-        const game = {}
-        return game;
+        const jsonResponse = {statusCode: 200, responseMessage: ''};
+        const response = await GamesService.updateGame(request.payload);
+
+        jsonResponse.data = await GamesService.getGameById(response.insertId);
+        jsonResponse.responseMessage = 'Game Updated';
+
+        return jsonResponse;
     }
     async deleteGame(request) {
         const jsonResponse = { statusCode: 200, responseMessage: '' };
-        const { id } = request.payload;
+        const { id } = request.params;
 
         const game = await GamesService.getGameById(id);
         if(game.length > 0) {

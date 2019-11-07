@@ -30,17 +30,17 @@ class GamesDAO {
         return response;
     }
     async updateGame(data) {
-        const response = await db.execute(`
+        const sql = `
             UPDATE Game SET
             name = ?,
-            developer = ?
-            publisher = ?
-            price = ?
-            description = ?
+            developer = ?,
+            publisher = ?,
+            price = ?,
+            description = ?,
             image = ?
             WHERE id = ?;
-
-        `, [
+        `;
+        const response = await db.execute(sql, [
             data.name,
             data.developer,
             data.publisher,

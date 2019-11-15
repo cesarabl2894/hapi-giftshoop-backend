@@ -7,12 +7,10 @@ dotenv.config();
 const { getRoutes, validateToken } = require('./helpers/utils');
 const Glue = require('@hapi/glue');
 const Manifest = require('./config/manifest');
-const jwt = require('jsonwebtoken');
 
 const options = {
     relativeTo: __dirname
 };
-
 
 const start = async () => {
 
@@ -29,7 +27,7 @@ const start = async () => {
 		validate: validateToken
 	});
 
-	try{
+	try {
 		for(let route of routes) {
 			server.route(route);
 		}

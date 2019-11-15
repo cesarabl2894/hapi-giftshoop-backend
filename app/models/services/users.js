@@ -21,6 +21,14 @@ class UsersService {
             console(error);
         }
     }
+    async updateToken(data) {
+        try{
+            const response = UsersDAO.deleteUser(data);
+            return response;
+        }catch(error){
+            console(error);
+        }
+    }
 }
 
 module.exports = new UsersService();

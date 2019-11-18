@@ -29,6 +29,31 @@ class UsersService {
             console(error);
         }
     }
+    async getAllUsers(){
+        try {
+            const users = UsersDAO.getAllUsers();
+            return users;
+        }catch(error){
+            console.log(error);
+        }
+    }
+    getUserById(id) {
+        try {
+            const user = UsersDAO.getUserbyId(id);
+            return user;
+        }catch(error){
+            throw(`Something went Wrong with the request ${error}`);
+        }
+    }
+    async updateUser(data){
+        try {
+
+            const user = await UsersDAO.updateUser(data);
+            return user;
+        }catch(error) {
+            console.log(error);
+        }
+    }
 }
 
 module.exports = new UsersService();

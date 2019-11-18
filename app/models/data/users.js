@@ -39,6 +39,30 @@ class UsersDAO {
         ], 'games');
         return update;
     }
+    async getAllUsers() {
+        const users = await db.execute('SELECT * FROM user', [], 'games');
+        return users;
+    }
+    async updateUser(data) {
+        const sql = ` UPDATE user 
+            SET first_name = ?,
+            last_name = ?,
+            address = ?, 
+            gamertag = ?,
+            profile_picture = ?,
+            role = ?;`;  
+        const user = await db.execute(sql, [
+            data.first_name,
+            data.last_name,
+            data.address,
+            data.gamertag,
+            data.profile_picture,
+            data.role
+        ], 'games');
+        
+        return user;
+    }
+
     
 }
 

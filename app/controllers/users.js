@@ -1,5 +1,6 @@
 const UsersService = require('../models/services/users');
 const encryptService = require('../models/services/encrypt');
+const { _ } = require('../helpers/utils');
 const Boom = require('@hapi/boom');
 
 class UsersCtrl {
@@ -39,6 +40,32 @@ class UsersCtrl {
         await UsersService.deleteUser(email);
         jsonResponse.responseMessage = 'User Deleted Correctly';
         return jsonResponse;
+    }
+
+    async updateUser(request) {
+        const jsonResponses = {responseCode: 200, responseMessage: ''};
+        return ;
+    }
+
+    async getUsers() {
+        const jsonResponse = {responseCode: 200 };
+        jsonResponse.data = await UsersService.getAllUsers();
+
+        return jsonResponse;
+    }
+
+    async getUserInfo(request) {
+        const jsonResponse = {responseCode: 200 };
+        const params = request.params;
+        const user =await UsersService.getUserById(params.id);
+
+        if(user.length > 0) {
+            jsonResponse.data = _.omit(user[0],['password']);
+            return jsonResponse;
+        }
+
+        return Boom.badRequest('User Not Found with Id');
+
     }
 }
 

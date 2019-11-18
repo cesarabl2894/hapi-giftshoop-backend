@@ -1,6 +1,7 @@
 const UsersService = require('../models/services/users');
 const encryptService = require('../models/services/encrypt');
 const { _ , promise } = require('../helpers/utils');
+const Email = require('../helpers/mail');
 const { promisify } = require('util');
 const { randomBytes } = require('crypto');
 const Boom = require('@hapi/boom');
@@ -82,12 +83,34 @@ class UsersCtrl {
 
     }
 
-    async resetRequest(data) {
+    async resetRequest(request) {
+        const jsonResponse = {responseCode: 200, responseMessage: ''}
         const randomBytesPromiseified = promisify(randomBytes);
-        const resetToken = (await randomBytesPromiseified(250)).toString('hex');
-        console.log(randomBytesPromiseified);
+        const resetToken = (await randomBytesPromiseified(50)).toString('hex');
+        const resetTokenExpiry = Date.now() + 3600 * 4; // 4 hours Token Expiry Duration
+        const user = await UsersService.getUserbyEmail(request.payload.email);
 
-        return resetToken;
+        if(user.length < 1 ){
+            return Boom.badRequest('User Not found with Email');
+        }
+        const payload = {
+            email: request.payload.email,
+            reset_token: resetToken,
+            reset_token_expiry: resetTokenExpiry
+        }
+        const emailOptions = {
+            to: request.payload.email,
+            subject: 'Password Reset Request',
+            text: '',
+            template:'resetPassword'
+        }
+
+        await UsersService.updateToken(payload);
+        await Email.sendEmail(emailOptions);
+
+        jsonResponse.responseMessage = 'Email Was sent with Reset Password Instructions';
+
+        return jsonResponse;
     }
 
     // Get Array of Users

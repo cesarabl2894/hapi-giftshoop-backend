@@ -32,10 +32,15 @@ class UsersDAO {
         return response;
     }
     async updateToken(data) {
-        const update = await db.execute('UPDATE User SET reset_token = ? , reset_token_expiry WHERE id = ?', [
+        console.log('Payload: ', data);
+        const update = await db.execute(`
+            UPDATE User SET 
+            reset_token = ? , 
+            reset_token_expiry = ?
+            WHERE email = ?;`, [
             data.reset_token,
-            data.reset_toke_expiry,
-            data.id
+            data.reset_token_expiry,
+            data.email
         ], 'games');
         return update;
     }
@@ -65,11 +70,12 @@ class UsersDAO {
         return user;
     }
     async updatePassword(data) {
+        console.log(data);
         const sql = `
             UPDATE user 
             SET password = ?
-            reset_token = null,
-            reset_token_expiry = null,
+            reset_token = '',
+            reset_token_expiry = '',
             WHERE email = ?;
         `;
 

@@ -47,6 +47,7 @@ class UsersDAO {
         const sql = ` UPDATE user 
             SET first_name = ?,
             last_name = ?,
+            email = ?,
             address = ?, 
             gamertag = ?,
             profile_picture = ?,
@@ -54,6 +55,7 @@ class UsersDAO {
         const user = await db.execute(sql, [
             data.first_name,
             data.last_name,
+            data.email,
             data.address,
             data.gamertag,
             data.profile_picture,
@@ -61,6 +63,20 @@ class UsersDAO {
         ], 'games');
         
         return user;
+    }
+    async updatePassword(data) {
+        const sql = `
+            UPDATE user 
+            SET password = ?
+            reset_token = null,
+            reset_token_expiry = null,
+            WHERE email = ?;
+        `;
+
+        const user = await db.execute(sql , [
+            data.password,
+            data.email
+        ], 'games');
     }
 
     

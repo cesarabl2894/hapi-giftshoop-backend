@@ -5,7 +5,7 @@ class UsersService {
         const user = await UsersDAO.addUser(data);
         return user;
     }
-    getUserbyEmail(email) {
+    async getUserbyEmail(email) {
         try {
             const user = UsersDAO.getUserbyEmail(email);
             return user;
@@ -13,7 +13,7 @@ class UsersService {
             throw(`Something went Wrong with the request ${error}`);
         }
     }
-    deleteUser(email) {
+    async deleteUser(email) {
         try{
             const response = UsersDAO.deleteUser(email);
             return response;
@@ -23,7 +23,7 @@ class UsersService {
     }
     async updateToken(data) {
         try{
-            const response = UsersDAO.deleteUser(data);
+            const response = UsersDAO.updateToken(data);
             return response;
         }catch(error){
             console(error);
@@ -37,10 +37,18 @@ class UsersService {
             console.log(error);
         }
     }
-    getUserById(id) {
+    async getUserById(id) {
         try {
-            const user = UsersDAO.getUserbyId(id);
+            const user = await UsersDAO.getUserbyId(id);
             return user;
+        }catch(error){
+            throw(`Something went Wrong with the request ${error}`);
+        }
+    }
+    async updateToken(data){
+        try {
+            const response = await UsersDAO.updateToken(data);
+            return response;
         }catch(error){
             throw(`Something went Wrong with the request ${error}`);
         }
@@ -52,6 +60,14 @@ class UsersService {
             return user;
         }catch(error) {
             console.log(error);
+        }
+    }
+    async updatePassword(data) {
+        try{
+            const response = UsersDAO.updateToken(data);
+            return response;
+        }catch(error) {
+            throw(`Something Went Wrong with Request: ${error}`);
         }
     }
 }

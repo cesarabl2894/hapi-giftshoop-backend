@@ -1,9 +1,21 @@
 const UsersService = require('../models/services/users');
 const encryptService = require('../models/services/encrypt');
-const { _ } = require('../helpers/utils');
+const { _ , promise } = require('../helpers/utils');
+const { promisify } = require('util');
+const { randomBytes } = require('crypto');
 const Boom = require('@hapi/boom');
 
 class UsersCtrl {
+    /**
+     * 
+     * @typedef {Object} request
+     * @property {string} first_name
+     */
+    /**
+     * Returns the add User Response
+     * @param {object} request 
+     * @returns {Promise<jsonResponse>}
+     */
     async addUser(request){
         const params = request.payload;
         const jsonResponse = { responseCode: 200 , responseMessage: '' };
@@ -42,11 +54,43 @@ class UsersCtrl {
         return jsonResponse;
     }
 
+    // Update User Function
     async updateUser(request) {
-        const jsonResponses = {responseCode: 200, responseMessage: ''};
-        return ;
+        const jsonResponse = {responseCode: 200, responseMessage: ''};
+        const { payload } = request;
+        const user = await UsersService.getUserById(payload.id);
+
+        // Validate that there is an existing ID
+        if(user.length < 1 ) {
+            return Boom.badRequest(' User Not Found with Id');
+        }
+
+        // Validate that is not overwritting an existing Email
+        if(user[0].email !== payload.email) {
+            const existingEmail = await UsersService.getUserbyEmail(payload.email);
+
+            if(existingEmail.length > 0 ){
+                return Boom.badRequest('User already linked with existing Email');
+            }
+
+        }
+
+        await UsersService.updateUser(payload);
+        jsonResponse.responseMessage = `User with id: ${payload.id} has been updated`;
+
+        return jsonResponse;
+
     }
 
+    async resetRequest(data) {
+        const randomBytesPromiseified = promisify(randomBytes);
+        const resetToken = (await randomBytesPromiseified(250)).toString('hex');
+        console.log(randomBytesPromiseified);
+
+        return resetToken;
+    }
+
+    // Get Array of Users
     async getUsers() {
         const jsonResponse = {responseCode: 200 };
         jsonResponse.data = await UsersService.getAllUsers();

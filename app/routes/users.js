@@ -45,13 +45,13 @@ module.exports = [
             auth: 'jwt',
             validate: {
                 payload: {
+                    id: Joi.number().required().min(1),
                     first_name: Joi.string().required().min(2).max(20),
                     last_name:Joi.string().required().min(2).max(20),
                     email: Joi.string().required().min(2).max(30),
                     address: Joi.string().required().min(5),
                     gamertag: Joi.string().required().min(2).max(30),
                     profile_picture: Joi.string().required().min(2).max(100),
-                    password: Joi.string().required().min(7).max(50),
                     role: Joi.string().required().min(2).max(30)
                 }
             }
@@ -78,5 +78,18 @@ module.exports = [
                 }
             }
         }
-    }
+    },
+    {
+        method: 'POST',
+        path: '/password/reset',
+        handler: usersCtrl.resetRequest,
+        options: {
+            tags: ['api'],
+            validate: {
+                payload: {
+                    email: Joi.string().required().email()
+                }
+            }
+        }
+    },
 ];

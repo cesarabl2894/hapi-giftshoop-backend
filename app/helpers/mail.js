@@ -22,8 +22,9 @@ class Mail {
     }
 
     async getEmailTemplate(templateName) {
-        const source = await fs.readFileSync(path.join(this.templateDirectory, templateName), 'utf8', (error,data) => {
-            if (error) throw error;
+        const source = await fs.readFileSync(path.join(this.templateDirectory, templateName+ '.hbs'), 'utf8', (error,data) => {
+            if (error) console.log(error);
+            // console.log(error)
 
             return data;
         });

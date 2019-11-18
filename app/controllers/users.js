@@ -102,7 +102,11 @@ class UsersCtrl {
             to: request.payload.email,
             subject: 'Password Reset Request',
             text: '',
-            template:'resetPassword'
+            template:'resetPassword',
+            data: {
+                resetToken: resetToken,
+                frontendUrl: process.env.FRONTEND_URL
+            }
         }
 
         await UsersService.updateToken(payload);

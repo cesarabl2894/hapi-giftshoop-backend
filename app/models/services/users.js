@@ -1,4 +1,5 @@
 const UsersDAO = require('../data/users');
+const Email = require('../../helpers/mail');
 
 class UsersService {
     async addUser(data){
@@ -24,6 +25,17 @@ class UsersService {
     async updateToken(data) {
         try{
             const response = UsersDAO.updateToken(data);
+            const emailOptions = {
+                to: data.email,
+                subject: 'Password Reset Request',
+                text: '',
+                template:'resetPassword',
+                data: {
+                    resetToken: data.resetToken,
+                    frontendUrl: process.env.FRONTEND_URL
+                }
+            }
+            await Email.sendEmail(emailOptions);            
             return response;
         }catch(error){
             console(error);
@@ -64,7 +76,7 @@ class UsersService {
     }
     async updatePassword(data) {
         try{
-            const response = UsersDAO.updateToken(data);
+            const response = UsersDAO.updatePassword(data);
             return response;
         }catch(error) {
             throw(`Something Went Wrong with Request: ${error}`);

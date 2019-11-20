@@ -1,7 +1,6 @@
 const UsersService = require('../models/services/users');
 const encryptService = require('../models/services/encrypt');
 const { _ , promise } = require('../helpers/utils');
-const Email = require('../helpers/mail');
 const { promisify } = require('util');
 const { randomBytes } = require('crypto');
 const Boom = require('@hapi/boom');
@@ -87,9 +86,9 @@ class UsersCtrl {
         const jsonResponse = {responseCode: 200, responseMessage: ''}
         const randomBytesPromiseified = promisify(randomBytes);
         const resetToken = (await randomBytesPromiseified(50)).toString('hex');
-        const resetTokenExpiry = Date.now() + 3600 * 4; // 4 hours Token Expiry Duration
+        const resetTokenExpiry = Date.now() + (1000 * 60* 60 * 4); // 4 hours Token Expiry Duration
         const user = await UsersService.getUserbyEmail(request.payload.email);
-
+        
         if(user.length < 1 ){
             return Boom.badRequest('User Not found with Email');
         }
@@ -98,19 +97,9 @@ class UsersCtrl {
             reset_token: resetToken,
             reset_token_expiry: resetTokenExpiry
         }
-        const emailOptions = {
-            to: request.payload.email,
-            subject: 'Password Reset Request',
-            text: '',
-            template:'resetPassword',
-            data: {
-                resetToken: resetToken,
-                frontendUrl: process.env.FRONTEND_URL
-            }
-        }
-
+        
         await UsersService.updateToken(payload);
-        await Email.sendEmail(emailOptions);
+        // await Email.sendEmail(emailOptions);
 
         jsonResponse.responseMessage = 'Email Was sent with Reset Password Instructions';
 
@@ -137,6 +126,34 @@ class UsersCtrl {
 
         return Boom.badRequest('User Not Found with Id');
 
+    }
+
+    async updatePassword(request) {
+        const payload = _.omit(request.payload, ['confirm_password', 'reset_token','reset_token_expiry']);
+        const jsonResponse = {responseCode: 200, responseMessage:''};
+        const user =await UsersService.getUserbyEmail(payload.email);
+        const salt = await encryptService.generateSalt();
+
+        if(user.length > 0) {
+             // Validate if Password and Confirm Password are the same
+            if(request.payload.password !== request.payload.confirm_password){
+                return Boom.badRequest('Passwords does\'t match');
+            }
+            // Validate if the reset token of the request is valid 
+            if(user[0].reset_token !== request.payload.reset_token || user[0].reset_token_expiry - Date.now() < 0){
+                return Boom.badRequest('Reset Not Token is not Valid or the Token is already expired');
+            }
+
+            payload.password  = await encryptService.hashPassword(payload.password, salt);
+
+            await UsersService.updatePassword(payload);
+            jsonResponse.responseMessage = 'Password Updated';
+
+
+            return jsonResponse;
+
+        }
+        return Boom.badRequest('User Not Found');
     }
 }
 

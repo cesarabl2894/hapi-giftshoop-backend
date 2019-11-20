@@ -81,13 +81,29 @@ module.exports = [
     },
     {
         method: 'POST',
-        path: '/password/reset',
+        path: '/password/reset/',
         handler: usersCtrl.resetRequest,
         options: {
             tags: ['api'],
             validate: {
                 payload: {
                     email: Joi.string().required().email()
+                }
+            }
+        }
+    },
+    {
+        method: 'POST',
+        path: '/password/update/',
+        handler: usersCtrl.updatePassword,
+        options: {
+            tags: ['api'],
+            validate: {
+                payload: {
+                    email: Joi.string().required().email(),
+                    password: Joi.string().required().min(7).max(50),
+                    confirm_password: Joi.string().required().min(7).max(50),
+                    reset_token: Joi.string().required()
                 }
             }
         }

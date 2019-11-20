@@ -40,7 +40,6 @@ const validateToken = async function (decoded, request, h) {
         return {isValid: false};
     }
     return{isValid: true};
-    // console.log(request._route.settings.tags.includes('api'));
 };
 
 module.exports = {

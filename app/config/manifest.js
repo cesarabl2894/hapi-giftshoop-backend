@@ -34,7 +34,15 @@ internals.manifest = {
 						title: 'API Documentation',
 						version: pckg.version
                     },
-                    documentationPath: '/'
+					documentationPath: '/',
+					securityDefinitions: {
+						'jwt': {
+							'type': 'apiKey',
+							'name': 'Authorization',
+							'in': 'header'
+						}
+					},
+					security: [{ 'jwt': [] }]
 				}
 			}
 		]

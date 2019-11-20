@@ -10,7 +10,6 @@ class authService {
         const users = await usersService.getUserbyEmail(email);
         const user = _.find(users, {email: email});
         let token = {};
-
         if(user) {
             const match = await encryptService.compare(password, user.password);
             if(match){

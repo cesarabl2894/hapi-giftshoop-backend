@@ -5,7 +5,9 @@ class loginCtrl {
 
     async login(request) {
         const jsonResponse = {responseCode: 200, responseMessage: ''};
+        
         jsonResponse.data = await authService.validateLogin(request.payload);
+        // console.log(request.payload);
 
         console.log(jsonResponse.data);
 

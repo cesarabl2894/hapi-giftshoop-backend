@@ -9,7 +9,6 @@ class GamesDAO {
         return game;
     }
     async addGame(data) {
-        console.log(data);
         const response = await db.execute(`
             INSERT INTO Game (name, developer, publisher, price, description, image) 
             VALUES (?,?,?,?,?,?)`

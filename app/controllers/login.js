@@ -7,9 +7,6 @@ class loginCtrl {
         const jsonResponse = {responseCode: 200, responseMessage: ''};
         
         jsonResponse.data = await authService.validateLogin(request.payload);
-        // console.log(request.payload);
-
-        console.log(jsonResponse.data);
 
         if(Boom.isBoom(jsonResponse.data)){
             return jsonResponse.data 

@@ -41,8 +41,6 @@ class UsersDAO {
             data.reset_token_expiry,
             data.email
         ], 'games');
-
-        console.log(update);
         return update;
     }
     async getAllUsers() {
